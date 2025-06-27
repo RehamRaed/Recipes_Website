@@ -13,6 +13,9 @@ function Section1() {
   const [newRecipes, setNewRecipes] = useState([]);
   const [ourPicks, setOurPicks] = useState([]);
   const [todayRecipe, setTodayRecipe] = useState(null);
+  const [loadingMenu, setLoadingMenu] = useState(true);
+  const [loadingToday, setLoadingToday] = useState(true);
+  const [loadingSelected, setLoadingSelected] = useState(true);
 
   const navigate = useNavigate();
 
@@ -26,6 +29,7 @@ function Section1() {
 
   useEffect(() => {
     const fetchMenuItems = async () => {
+      setLoadingMenu(true);
       const dishTypes = ["أكلات رئيسية", "مقبلات", "مشروبات"];
       const promises = dishTypes.map(async (type) => {
         const q = query(
@@ -44,9 +48,11 @@ function Section1() {
 
       const results = await Promise.all(promises);
       setMenuItems(results.filter((item) => item !== null));
+      setLoadingMenu(false);
     };
 
     const fetchTodayRecipe = async () => {
+      setLoadingToday(true);
       const q = query(
         collection(db, "recipes"),
         where("category", "==", "today")
@@ -54,9 +60,11 @@ function Section1() {
       const snapshot = await getDocs(q);
       const docs = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
       if (docs.length > 0) setTodayRecipe(docs[0]);
+      setLoadingToday(false);
     };
 
     const fetchSelectedRecipes = async () => {
+      setLoadingSelected(true);
       const latestQuery = query(
         collection(db, "recipes"),
         where("category", "==", "new")
@@ -81,6 +89,7 @@ function Section1() {
           .map((doc) => ({ id: doc.id, ...doc.data() }))
           .slice(0, 4)
       );
+      setLoadingSelected(false);
     };
 
     fetchMenuItems();
@@ -152,63 +161,98 @@ function Section1() {
           <Col md={9} className="d-flex flex-column">
             <Row>
               <Col md={7}>
-                {menuItems.length > 0 && menuItems[current] && (
-                  <div className="carousel-container">
-                    <div
-                      className="carousel-image-wrapper"
-                      style={{ position: "relative" }}
-                    >
-                      <img
-                        src={menuItems[current].imageUrl}
-                        alt={menuItems[current].title}
-                        className="carousel-image"
-                        onClick={() =>
-                          navigate(`/recipe/${menuItems[current].id}`)
-                        }
-                      />
-                      <div className="image-overlay-text">
-                        <div className="overlay-title">منيو اليوم</div>
-                        <div className="overlay-subtitle">
-                          يتضمن بعض المقبلات ، طبق <br /> رئيسي ، ومشروب
+                {loadingMenu ? (
+                  <div
+                    style={{
+                      height: "348px",
+                      borderRadius: "10px",
+                      backgroundColor: "#eee",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      color: "#999",
+                      fontSize: "1.2rem",
+                    }}
+                  >
+                    جارٍ تحميل المنيو...
+                  </div>
+                ) : (
+                  menuItems.length > 0 &&
+                  menuItems[current] && (
+                    <div className="carousel-container">
+                      <div
+                        className="carousel-image-wrapper"
+                        style={{ position: "relative" }}
+                      >
+                        <img
+                          src={menuItems[current].imageUrl}
+                          alt={menuItems[current].title}
+                          className="carousel-image"
+                          onClick={() =>
+                            navigate(`/recipe/${menuItems[current].id}`)
+                          }
+                          style={{ cursor: "pointer", borderRadius: "10px" }}
+                        />
+                        <div className="image-overlay-text">
+                          <div className="overlay-title">منيو اليوم</div>
+                          <div className="overlay-subtitle">
+                            يتضمن بعض المقبلات ، طبق <br /> رئيسي ، ومشروب
+                          </div>
                         </div>
-                      </div>
-                      <div className="carousel-overlay">
-                        <div className="carousel-title">
-                          {menuItems[current].dishType}:{" "}
-                          {menuItems[current].title}
-                        </div>
-                        <div className="carousel-arrows">
-                          <button
-                            onClick={() =>
-                              setCurrent(
-                                (prev) =>
-                                  (prev - 1 + menuItems.length) %
-                                  menuItems.length
-                              )
-                            }
-                            className="arrow-btn"
-                          >
-                            ❮
-                          </button>
-                          <button
-                            onClick={() =>
-                              setCurrent(
-                                (prev) => (prev + 1) % menuItems.length
-                              )
-                            }
-                            className="arrow-btn"
-                          >
-                            ❯
-                          </button>
+                        <div className="carousel-overlay">
+                          <div className="carousel-title">
+                            {menuItems[current].dishType}:{" "}
+                            {menuItems[current].title}
+                          </div>
+                          <div className="carousel-arrows">
+                            <button
+                              onClick={() =>
+                                setCurrent(
+                                  (prev) =>
+                                    (prev - 1 + menuItems.length) %
+                                    menuItems.length
+                                )
+                              }
+                              className="arrow-btn"
+                            >
+                              ❮
+                            </button>
+                            <button
+                              onClick={() =>
+                                setCurrent(
+                                  (prev) => (prev + 1) % menuItems.length
+                                )
+                              }
+                              className="arrow-btn"
+                            >
+                              ❯
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
+                  )
                 )}
               </Col>
 
               <Col md={5}>
-                {todayRecipe ? (
+                {loadingToday ? (
+                  <div
+                    style={{
+                      height: "348px",
+                      borderRadius: "15px",
+                      backgroundColor: "#eee",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      color: "#999",
+                      fontSize: "1.2rem",
+                      marginBottom: "10px",
+                    }}
+                  >
+                    جارٍ تحميل وصفة اليوم...
+                  </div>
+                ) : todayRecipe ? (
                   <div
                     onClick={() => navigate(`/recipe/${todayRecipe.id}`)}
                     style={{
@@ -238,16 +282,30 @@ function Section1() {
                     </h5>
                   </div>
                 ) : (
-                  <p> ... جارٍ تحميل وصفة اليوم</p>
+                  <p>لا توجد وصفة اليوم</p>
                 )}
               </Col>
             </Row>
 
             <Row className="mt-5">
               <Col md={6}>
-                {newRecipes.length > 0 ? (
+                <h2 className="title">أجدد الوصفات والطبخات</h2>
+                {loadingSelected ? (
+                  <div
+                    style={{
+                      height: "230px",
+                      backgroundColor: "#eee",
+                      borderRadius: "10px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      color: "#999",
+                    }}
+                  >
+                    جارٍ تحميل أجدد الوصفات...
+                  </div>
+                ) : newRecipes.length > 0 ? (
                   <div>
-                    <h2 className="title">أجدد الوصفات والطبخات</h2>
                     <div
                       onClick={() => navigate(`/recipe/${newRecipes[0].id}`)}
                       style={{ cursor: "pointer" }}
@@ -280,14 +338,28 @@ function Section1() {
                     </ul>
                   </div>
                 ) : (
-                  <p>... جارٍ تحميل أجدد الوصفات</p>
+                  <p>لا توجد وصفات جديدة</p>
                 )}
               </Col>
 
               <Col md={6}>
-                {ourPicks.length > 0 && (
+                <h2 className="title">وصفات وطبخات من اختيارنا</h2>
+                {loadingSelected ? (
+                  <div
+                    style={{
+                      height: "230px",
+                      backgroundColor: "#eee",
+                      borderRadius: "10px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      color: "#999",
+                    }}
+                  >
+                    جارٍ تحميل وصفاتنا المختارة...
+                  </div>
+                ) : ourPicks.length > 0 ? (
                   <div>
-                    <h2 className="title">وصفات وطبخات من اختيارنا</h2>
                     <div
                       onClick={() => navigate(`/recipe/${ourPicks[0].id}`)}
                       style={{ cursor: "pointer" }}
@@ -307,7 +379,7 @@ function Section1() {
                       </h5>
                     </div>
                     <hr className="mt-4" />
-                    <ul className="list-unstyled pt-2">
+                    <ul className="list-unstyled ">
                       {ourPicks.slice(1, 4).map((recipe) => (
                         <li
                           key={recipe.id}
@@ -319,6 +391,8 @@ function Section1() {
                       ))}
                     </ul>
                   </div>
+                ) : (
+                  <p>لا توجد وصفات مختارة</p>
                 )}
               </Col>
             </Row>
@@ -360,6 +434,7 @@ function Section1() {
                         alert("الوصفة غير موجودة");
                       }
                     }}
+                    style={{ cursor: "pointer" }}
                   >
                     {title}
                   </li>

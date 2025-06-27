@@ -11,8 +11,8 @@ body, #root {
   background-color: rgb(246, 246, 246);
 }
 .container {
-  padding-inline-start: 4rem !important;
-  padding-inline-end: 4rem !important;
+  padding-inline-start: 3rem !important;
+  padding-inline-end: 3rem !important;
 }
 .main-title {
   text-align: center;

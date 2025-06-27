@@ -106,6 +106,13 @@
   color: #000;
 }
 
+.carousel-arrows {
+  display: flex;
+  gap: 8px;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
 .image-overlay-text {
   position: absolute;
   top: 30px;
@@ -118,7 +125,6 @@
   color: white;
   font-weight: 700;
   font-size: 25px;
-
 }
 
 .overlay-subtitle {
@@ -279,7 +285,18 @@
   color: #333;
 }
 
+.icons {
+  height: 30px;
+}
+
 @media (max-width: 1400px) {
+  .text {
+    font-size: 16px;
+  }
+
+  .icons {
+    height: 25px;
+  }
 
   .carousel-container,
   .carousel-image-wrapper {
@@ -295,7 +312,28 @@
   }
 }
 
-@media (max-width: 991px) {
+@media (max-width: 1200px) {
+  .text {
+    font-size: 15px;
+  }
+
+  .icons {
+    height: 22px;
+  }
+  .list-unstyled{
+   padding-right: 0;
+  }
+}
+
+@media (max-width: 992px) {
+  .text {
+    font-size: 22px;
+  }
+
+  .icons {
+    height: 30px;
+  }
+  
 
   .carousel-container {
     display: flex;
@@ -318,7 +356,6 @@
     height: auto;
   }
 
-  /* خلي كل الأعمدة تاخد عرض كامل */
   .col-md-7,
   .col-md-5,
   .col-md-6,

@@ -108,90 +108,149 @@ function Section1() {
       <Row className="row2">
         <Col md={9} className="my-custom-col">
           <Row>
-            {dite.length > 0 && (
-              <Col md={4} className="col4">
-                <h3
-                  style={{
-                    fontWeight: "700",
-                    fontSize: "20px",
-                    padding: "7px 0",
-                  }}
-                >
-                  وصفات رجيم ودايت
-                </h3>
-                <div
-                  style={{
-                    overflow: "hidden",
-                    height: "180px",
-                    cursor: "pointer",
-                  }}
-                  onClick={() => navigate(`/recipe/${dite[0].id}`)}
-                >
-                  <img
-                    src={dite[0].imageUrl}
-                    alt={dite[0].title}
-                    style={{
-                      objectFit: "cover",
-                      width: "100%",
-                      height: "100%",
-                    }}
-                  />
-                </div>
-                <h5
-                  style={{
-                    marginTop: "10px",
-                    textAlign: "center",
-                    cursor: "pointer",
-                  }}
-                  onClick={() => navigate(`/recipe/${dite[0].id}`)}
-                >
-                  {dite[0].title}
-                </h5>
+            <Col md={4} className="col4">
+              <h3
+                style={{
+                  fontWeight: "700",
+                  fontSize: "20px",
+                  padding: "7px 0",
+                }}
+              >
+                وصفات رجيم ودايت
+              </h3>
 
-                <div
-                  style={{
-                    marginTop: "10px",
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "5px",
-                  }}
-                >
-                  {dite.slice(1, 4).map((diteItem) => (
-                    <div
-                      key={diteItem.id}
-                      onClick={() => navigate(`/recipe/${diteItem.id}`)}
+              {dite.length === 0 ? (
+                <>
+                  <div
+                    style={{
+                      backgroundColor: "#eee",
+                      height: "180px",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      color: "#999",
+                      fontWeight: "500",
+                      cursor: "default",
+                    }}
+                  >
+                    جارٍ تحميل الصورة...
+                  </div>
+
+                  <h5
+                    style={{
+                      marginTop: "10px",
+                      textAlign: "center",
+                      color: "#999",
+                      fontWeight: "500",
+                    }}
+                  >
+                    جارٍ تحميل العنوان...
+                  </h5>
+
+                  <div
+                    style={{
+                      marginTop: "10px",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "5px",
+                    }}
+                  >
+                    {[1, 2, 3].map((i) => (
+                      <div
+                        key={i}
+                        style={{
+                          textAlign: "right",
+                          paddingBottom: "5px",
+                          marginBottom: "5px",
+                          marginTop: "15px",
+                          borderBottom: "2px dotted rgba(152, 152, 152, 0.57)",
+                          color: "#999",
+                          cursor: "default",
+                        }}
+                      >
+                        جارٍ تحميل الوصفة...
+                      </div>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div
+                    style={{
+                      overflow: "hidden",
+                      height: "180px",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => navigate(`/recipe/${dite[0].id}`)}
+                  >
+                    <img
+                      src={dite[0].imageUrl}
+                      alt={dite[0].title}
                       style={{
-                        cursor: "pointer",
-                        textAlign: "right",
-                        paddingBottom: "5px",
-                        marginBottom: "5px",
-                        marginTop: "15px",
-                        borderBottom: "2px dotted rgba(152, 152, 152, 0.57)",
+                        objectFit: "cover",
+                        width: "100%",
+                        height: "100%",
                       }}
-                    >
-                      {diteItem.title}
-                    </div>
-                  ))}
-                </div>
-                <Link
-                  to="/diet-recipes"
-                  style={{
-                    display: "inline-block",
-                    textAlign: "left",
-                    color: "rgb(2, 142, 189)",
-                    width: "100%",
-                    textDecoration: "none",
-                  }}
-                >
-                  جميع الوصفات
-                </Link>
-              </Col>
-            )}
+                    />
+                  </div>
+                  <h5
+                    style={{
+                      marginTop: "10px",
+                      textAlign: "center",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => navigate(`/recipe/${dite[0].id}`)}
+                  >
+                    {dite[0].title}
+                  </h5>
+
+                  <div
+                    style={{
+                      marginTop: "10px",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "5px",
+                    }}
+                  >
+                    {dite.slice(1, 4).map((diteItem) => (
+                      <div
+                        key={diteItem.id}
+                        onClick={() => navigate(`/recipe/${diteItem.id}`)}
+                        style={{
+                          cursor: "pointer",
+                          textAlign: "right",
+                          paddingBottom: "5px",
+                          marginBottom: "5px",
+                          marginTop: "15px",
+                          borderBottom: "2px dotted rgba(152, 152, 152, 0.57)",
+                        }}
+                      >
+                        {diteItem.title}
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
+
+              <Link
+                to="/diet-recipes"
+                style={{
+                  display: "inline-block",
+                  textAlign: "left",
+                  color: "rgb(2, 142, 189)",
+                  width: "100%",
+                  textDecoration: "none",
+                  marginTop: "15px",
+                }}
+              >
+                جميع الوصفات
+              </Link>
+            </Col>
 
             <Col md={4} className="col4">
               <div className="d-flex justify-content-center gap-2 bg-secondary text-white p-2">
                 <h3 className="text">وصفات حسب الطبق</h3>
-                <img src={kitchen} style={{ height: "30px" }} alt="طبق" />
+                <img src={kitchen} className="icons" alt="طبق" />
               </div>
 
               {dishTypes.slice(0, 7).map((type, index) => (
@@ -229,7 +288,7 @@ function Section1() {
             <Col md={4} className="col4">
               <div className="d-flex justify-content-center gap-2 bg-secondary text-white p-2">
                 <h3 className="text">وصفات حسب المطبخ</h3>
-                <img src={dish} style={{ height: "30px" }} alt="مطبخ" />
+                <img src={dish} className="icons" alt="مطبخ" />
               </div>
               {cuisineTypes.slice(0, 7).map((type, index) => (
                 <div

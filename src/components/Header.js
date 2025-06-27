@@ -280,8 +280,9 @@ function Header() {
                       to="/all-recipes"
                       onClick={() => setShowSidebar(false)}
                       className="sidebar-link d-flex align-items-center gap-1"
+                      style={{marginLeft:"5px"}}
                     >
-                      <i className="bi bi-arrow-left-circle"></i> جميع التصنيفات
+                      <i className="bi bi-arrow-left-circle"></i>جميع التصنيفات
                     </Link>
                   </li>
                 </ul>
