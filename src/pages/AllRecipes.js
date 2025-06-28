@@ -120,7 +120,6 @@ function AllRecipes() {
             ))}
           </Row>
 
-          {/* Pagination */}
           <div className="d-flex justify-content-center align-items-center gap-2 mt-5 flex-wrap">
             <Button
               style={{

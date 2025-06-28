@@ -51,7 +51,6 @@ function RecipesByCuisine() {
       </div>
     );
 
-  // Pagination
   const indexOfLastRecipe = currentPage * recipesPerPage;
   const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
   const currentRecipes = recipes.slice(indexOfFirstRecipe, indexOfLastRecipe);
@@ -128,7 +127,6 @@ function RecipesByCuisine() {
             ))}
           </Row>
 
-          {/* Pagination */}
           {totalPages > 1 && (
             <div className="d-flex justify-content-center align-items-center mt-5 gap-2 flex-wrap">
               <Button
